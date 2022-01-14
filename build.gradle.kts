@@ -20,10 +20,11 @@ repositories {
 
 dependencies {
     implementation("io.ktor:ktor-server-auth:$ktor_version")
-    implementation( "io.ktor:ktor-jackson:$ktor_version")
     implementation("io.ktor:ktor-server-core:$ktor_version")
     implementation("io.ktor:ktor-server-netty:$ktor_version")
     implementation("ch.qos.logback:logback-classic:$logback_version")
+    //Test dependencies
     testImplementation("io.ktor:ktor-server-tests:$ktor_version")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
+    testImplementation("org.assertj:assertj-core:3.11.1")
 }

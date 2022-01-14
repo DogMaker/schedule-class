@@ -1,23 +1,26 @@
 package com.pro.mentors.domain.services
 
-import com.pro.mentors.domain.entities.AvailabilityCalendar
-import com.pro.mentors.domain.entities.EventType
-import java.time.DayOfWeek
+import java.time.Duration
 import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
 
 class CreateAvailabilityCalendar {
-    val req = "{ \"id\": 12,\"title\": \"\",\"eventType\": \"FREE\",\"start\": \"2022-01-13T22:59:15.791\",\"end\": \"2022-01-13T22:59:15.796\",\"exceptDays\": [\"SUNDAY\", \"SATURDAY\"],\"exceptTimes\": [\"2022-01-13T22:59:15.842\"] }"
 
+    fun create(beginDate: LocalDateTime, endDate: LocalDateTime ): List<String> {
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSSSSS")
 
-    fun create(){
-        val created = AvailabilityCalendar(12,"",EventType.FREE, LocalDateTime.now(), LocalDateTime.now(),
-        listOf(DayOfWeek.SUNDAY,DayOfWeek.SATURDAY), listOf(LocalDateTime.now())
-        )
+        val unit = ChronoUnit.valueOf("HOURS")
+        val  dates =  mutableListOf<String>()
 
-        println(created)
+        var dateBetween: LocalDateTime = beginDate
+        while (!dateBetween.isAfter(endDate)) {
+            dates.add(dateBetween.format(formatter))
+            dateBetween = dateBetween.plus(Duration.of(1,unit))
+        }
+
+        return dates.toList()
     }
 }
 
-fun main() {
-    CreateAvailabilityCalendar().create()
-}
+
