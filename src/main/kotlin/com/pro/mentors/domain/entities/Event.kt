@@ -1,12 +1,12 @@
 package com.pro.mentors.domain.entities
 
-import java.time.LocalDateTime
+import java.util.*
 
 data class Event(
-    val id: Int,
+    val id: UUID,
     val title: String,
     val eventType: EventType,
     val url: String,
-    val start: LocalDateTime,
-    val end: LocalDateTime
+    val start: String,
+    val end: String
 )
