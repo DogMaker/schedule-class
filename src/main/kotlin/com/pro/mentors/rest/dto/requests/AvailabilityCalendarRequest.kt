@@ -5,8 +5,6 @@ import java.time.DayOfWeek
 import java.time.LocalDateTime
 
 data class AvailabilityCalendarRequest (
-    val id: Int,
-    val title: String,
     val eventType: EventType = EventType.FREE,
     val start: LocalDateTime,
     val end: LocalDateTime,

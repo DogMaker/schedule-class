@@ -7,7 +7,6 @@ import java.time.Duration
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
-import java.util.UUID
 
 class CreateAvailabilityCalendar {
     private val unit = ChronoUnit.valueOf("HOURS")
@@ -21,12 +20,9 @@ class CreateAvailabilityCalendar {
         dates.forEach { date ->
             events.add(
                 Event(
-                    id = UUID.randomUUID(),
-                    title = FREE.status,
                     eventType = FREE,
-                    url = "",
-                    date,
-                    LocalDateTime.parse(date, formatter).plus(Duration.of(1, unit)).toString()
+                    start = date,
+                    end = LocalDateTime.parse(date, formatter).plus(Duration.of(1, unit)).toString()
                 )
             )
         }
