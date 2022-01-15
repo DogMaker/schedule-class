@@ -6,16 +6,20 @@ import com.pro.mentors.rest.dto.requests.AvailabilityCalendarRequest
 import java.time.DayOfWeek
 import java.time.Duration
 import java.time.LocalDateTime
+import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 
 class CreateAvailabilityCalendar {
-    private val unit = ChronoUnit.valueOf("HOURS")
-    private val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSSSSS")
+    private val unitHours = ChronoUnit.valueOf("HOURS")
+    private val unitMinutes = ChronoUnit.valueOf("MINUTES")
+    private val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+    private val timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss")
+
 
     fun create(datesConfig: AvailabilityCalendarRequest): MutableList<Event> {
 
-        val dates = generateRageDate(datesConfig.start, datesConfig.end, datesConfig.exceptDays)
+        val dates = generateRageDate(datesConfig)
 
         val events = mutableListOf<Event>()
         dates.forEach { date ->
@@ -23,7 +27,7 @@ class CreateAvailabilityCalendar {
                 Event(
                     eventType = FREE,
                     start = date,
-                    end = date.toLocalDateTime().plus(Duration.of(1, unit)).toString()
+                    end = date.toLocalDateTime().plus(Duration.of(1, unitHours)).toString()
                 )
             )
         }
@@ -31,17 +35,20 @@ class CreateAvailabilityCalendar {
         return events
     }
 
-    fun generateRageDate(beginDate: LocalDateTime, endDate: LocalDateTime, exceptDays: List<DayOfWeek>): List<String> {
+    private fun generateRageDate(datesConfig: AvailabilityCalendarRequest): List<String> {
         val dates = mutableListOf<String>()
         val oneHour = 1L
 
-        var dateBetween: LocalDateTime = beginDate
-        while (!dateBetween.isAfter(endDate)) {
-            when(isExceptDay(dateBetween, exceptDays)){
-                true ->  println("No allowed")
+        val getFirstSetTime = datesConfig.exceptTimes.first()
+
+        var dateBetween: LocalDateTime = datesConfig.start
+        while (!dateBetween.isAfter(datesConfig.end)) {
+            when {
+                isExceptDay(dateBetween, datesConfig.exceptDays) ->  Unit
+                isExceptTime(getFirstSetTime,LocalTime.parse(dateBetween.format(timeFormatter))) ->  Unit
                 else ->  dates.add(dateBetween.format(formatter))
             }
-            dateBetween = dateBetween.plus(Duration.of(oneHour, unit))
+            dateBetween = dateBetween.plus(Duration.of(oneHour, unitHours))
         }
 
         return dates.toList()
@@ -51,7 +58,11 @@ class CreateAvailabilityCalendar {
         return localDateTime.dayOfWeek in daysOfWeek
     }
 
+    private fun isExceptTime(range: com.pro.mentors.rest.dto.requests.ExceptionTime, targetTime: LocalTime): Boolean {
+        return targetTime.isAfter(range.start.minus(Duration.of(1, unitMinutes)))
+                .and(targetTime.isBefore(range.end))
+    }
+
     private fun String.toLocalDateTime() = LocalDateTime.parse(this, formatter)
 
 }
-

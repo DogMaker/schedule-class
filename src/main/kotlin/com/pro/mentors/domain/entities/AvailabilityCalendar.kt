@@ -2,6 +2,7 @@ package com.pro.mentors.domain.entities
 
 import java.time.DayOfWeek
 import java.time.LocalDateTime
+import java.time.LocalTime
 
 data class AvailabilityCalendar (
     val id: Int,
@@ -10,5 +11,10 @@ data class AvailabilityCalendar (
     val start: LocalDateTime,
     val end: LocalDateTime,
     val exceptDays: List<DayOfWeek>,
-    val exceptTimes: List<LocalDateTime>
+    val exceptTimes: List<ExceptionTime>
+)
+
+data class ExceptionTime(
+    val start: LocalTime,
+    val end: LocalTime
 )
