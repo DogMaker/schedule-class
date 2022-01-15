@@ -3,6 +3,7 @@ package com.pro.mentors.domain.services
 import com.pro.mentors.domain.entities.Event
 import com.pro.mentors.domain.entities.EventType.FREE
 import com.pro.mentors.rest.dto.requests.AvailabilityCalendarRequest
+import java.time.DayOfWeek
 import java.time.Duration
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -14,7 +15,7 @@ class CreateAvailabilityCalendar {
 
     fun create(datesConfig: AvailabilityCalendarRequest): MutableList<Event> {
 
-        val dates = generateRageDate(datesConfig.start, datesConfig.end)
+        val dates = generateRageDate(datesConfig.start, datesConfig.end, datesConfig.exceptDays)
 
         val events = mutableListOf<Event>()
         dates.forEach { date ->
@@ -22,7 +23,7 @@ class CreateAvailabilityCalendar {
                 Event(
                     eventType = FREE,
                     start = date,
-                    end = LocalDateTime.parse(date, formatter).plus(Duration.of(1, unit)).toString()
+                    end = date.toLocalDateTime().plus(Duration.of(1, unit)).toString()
                 )
             )
         }
@@ -30,16 +31,27 @@ class CreateAvailabilityCalendar {
         return events
     }
 
-    fun generateRageDate(beginDate: LocalDateTime, endDate: LocalDateTime): List<String> {
+    fun generateRageDate(beginDate: LocalDateTime, endDate: LocalDateTime, exceptDays: List<DayOfWeek>): List<String> {
         val dates = mutableListOf<String>()
+        val oneHour = 1L
 
         var dateBetween: LocalDateTime = beginDate
         while (!dateBetween.isAfter(endDate)) {
-            dates.add(dateBetween.format(formatter))
-            dateBetween = dateBetween.plus(Duration.of(1, unit))
+            when(isExceptDay(dateBetween, exceptDays)){
+                true ->  println("No allowed")
+                else ->  dates.add(dateBetween.format(formatter))
+            }
+            dateBetween = dateBetween.plus(Duration.of(oneHour, unit))
         }
 
         return dates.toList()
     }
+
+    private fun isExceptDay(localDateTime: LocalDateTime, daysOfWeek: List<DayOfWeek>): Boolean {
+        return localDateTime.dayOfWeek in daysOfWeek
+    }
+
+    private fun String.toLocalDateTime() = LocalDateTime.parse(this, formatter)
+
 }
 

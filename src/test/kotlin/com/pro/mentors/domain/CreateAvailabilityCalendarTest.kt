@@ -14,7 +14,7 @@ class CreateAvailabilityCalendarTest {
         val dateFirst = LocalDateTime.parse("2021-01-01 20:00:08.208812", formatter)
         val dateLast = LocalDateTime.parse("2021-01-01 20:00:08.208812", formatter)
 
-        val rangeOfDates = CreateAvailabilityCalendar().generateRageDate(dateFirst, dateLast)
+        val rangeOfDates = CreateAvailabilityCalendar().generateRageDate(dateFirst, dateLast, datesConfig.exceptDays)
 
        assertThat(1).isEqualTo(rangeOfDates.size)
     }
@@ -25,7 +25,7 @@ class CreateAvailabilityCalendarTest {
         val dateFirst = LocalDateTime.parse("2021-01-01 20:00:08.208812", formatter)
         val dateLast = LocalDateTime.parse("2021-01-02 00:00:08.208812", formatter)
 
-        val rangeOfDates = CreateAvailabilityCalendar().generateRageDate(dateFirst, dateLast)
+        val rangeOfDates = CreateAvailabilityCalendar().generateRageDate(dateFirst, dateLast, datesConfig.exceptDays)
 
         assertThat(5).isEqualTo(rangeOfDates.size)
     }
@@ -36,7 +36,7 @@ class CreateAvailabilityCalendarTest {
         val dateFirst = LocalDateTime.parse("2021-01-01 20:00:08.208812", formatter)
         val dateLast = LocalDateTime.parse("2021-01-02 19:00:08.208812", formatter)
 
-        val rangeOfDates = CreateAvailabilityCalendar().generateRageDate(dateFirst, dateLast)
+        val rangeOfDates = CreateAvailabilityCalendar().generateRageDate(dateFirst, dateLast, datesConfig.exceptDays)
 
         assertThat(24).isEqualTo(rangeOfDates.size)
     }
