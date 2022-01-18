@@ -4,6 +4,7 @@ import com.pro.mentors.domain.entities.Event
 import com.pro.mentors.domain.services.CreateAvailabilityCalendar
 import com.pro.mentors.rest.config.mapper
 import com.pro.mentors.rest.dto.requests.AvailabilityCalendarRequest
+import com.pro.mentors.rest.dto.requests.toAvailabilityCalendar
 
 
 class CreateAvailabilityController {
@@ -14,6 +15,6 @@ class CreateAvailabilityController {
             throw RuntimeException("Deserialization fail")
         }
 
-        return CreateAvailabilityCalendar().create(availabilityCalendar)
+        return CreateAvailabilityCalendar().create(availabilityCalendar.toAvailabilityCalendar())
     }
 }

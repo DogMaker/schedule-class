@@ -4,8 +4,8 @@ import java.time.DayOfWeek
 import java.time.LocalDateTime
 import java.time.LocalTime
 
-data class AvailabilityCalendar (
-    val id: Int,
+data class AvailabilityCalendar(
+    val id: String,
     val title: String,
     val eventType: EventType = EventType.FREE,
     val start: LocalDateTime,

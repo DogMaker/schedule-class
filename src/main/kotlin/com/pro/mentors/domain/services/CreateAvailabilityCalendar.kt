@@ -1,9 +1,9 @@
 package com.pro.mentors.domain.services
 
+import com.pro.mentors.domain.entities.AvailabilityCalendar
 import com.pro.mentors.domain.entities.Event
 import com.pro.mentors.domain.entities.EventType.FREE
-import com.pro.mentors.rest.dto.requests.AvailabilityCalendarRequest
-import com.pro.mentors.rest.dto.requests.ExceptionTime
+import com.pro.mentors.domain.entities.ExceptionTime
 import java.time.DayOfWeek
 import java.time.Duration
 import java.time.LocalDateTime
@@ -17,7 +17,7 @@ class CreateAvailabilityCalendar {
     private val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
     private val timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss")
 
-    fun create(datesConfig: AvailabilityCalendarRequest): MutableList<Event> {
+    fun create(datesConfig: AvailabilityCalendar): MutableList<Event> {
 
         val dates = generateRageDate(datesConfig)
 
@@ -35,7 +35,7 @@ class CreateAvailabilityCalendar {
         return events
     }
 
-    private fun generateRageDate(datesConfig: AvailabilityCalendarRequest): List<String> {
+    private fun generateRageDate(datesConfig: AvailabilityCalendar): List<String> {
         val dates = mutableListOf<String>()
 
         val exceptTime = datesConfig.exceptTimes
@@ -53,7 +53,7 @@ class CreateAvailabilityCalendar {
         return dates.toList()
     }
 
-    private fun LocalDateTime.validateLimitTimeOnRage(range: AvailabilityCalendarRequest): LocalDateTime {
+    private fun LocalDateTime.validateLimitTimeOnRage(range: AvailabilityCalendar): LocalDateTime {
         this.toLocalTime().let {
             it >= (range.start.toLocalTime()) &&
                 it < (range.end.toLocalTime())}.takeIf { it }
