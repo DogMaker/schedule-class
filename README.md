@@ -8,8 +8,13 @@ curl --location --request POST 'http://0.0.0.0:8080//create-range' \
 	"end": "2022-01-15T18:00:00",
 	"exceptDays": ["FRIDAY"],
 	"exceptTimes": [{
-		"start": "11:59",
-		"end": "14:00"
-	}]
+		"start": "01:00",
+		"end": "03:00"
+	},
+    {
+		"start": "04:00",
+		"end": "06:00"
+	}
+    ]
 }'
 ```
