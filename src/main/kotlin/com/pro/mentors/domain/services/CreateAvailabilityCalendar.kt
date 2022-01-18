@@ -56,7 +56,7 @@ class CreateAvailabilityCalendar {
     private fun LocalDateTime.validateLimitTimeOnRage(range: AvailabilityCalendarRequest): LocalDateTime {
         this.toLocalTime().let {
             it >= (range.start.toLocalTime()) &&
-                it <= (range.end.toLocalTime())}.takeIf { it }
+                it < (range.end.toLocalTime())}.takeIf { it }
             ?.let {
                 return this.plus(Duration.of(1, unitHours))
             }
