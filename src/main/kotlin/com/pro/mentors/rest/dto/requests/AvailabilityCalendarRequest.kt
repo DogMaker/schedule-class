@@ -33,7 +33,7 @@ fun AvailabilityCalendarRequest.toAvailabilityCalendar()= AvailabilityCalendar(
 fun List<ExceptionTimeRequest>.toExceptTimes(): List<ExceptionTime> {
     val exceptTimesList = mutableListOf<ExceptionTime>()
     this.forEach {
-        times ->
+            times ->
         exceptTimesList.add(ExceptionTime( times.start, times.end))
     }
     return exceptTimesList.toList()
